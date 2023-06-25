@@ -2,6 +2,32 @@ const msgerForm = get(".msger-inputarea");
 const msgerInput = get(".msger-input");
 const msgerChat = get(".msger-chat");
 
+const socket = io();
+
+// Espera que o iframe seja carregado
+window.addEventListener('load', function () {
+    // Obtém a referência para o iframe
+    var login = document.getElementById('login');
+
+    // Obtém o documento dentro do iframe
+    var loginDocument = login.contentDocument || login.contentWindow.document;
+
+    const formLogin = loginDocument.getElementById("login-form");
+    const usernameLogin = loginDocument.getElementById("usernameLogin");
+    const roomCode = loginDocument.getElementById("roomCode");
+
+    formLogin.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        if (usernameLogin.value && roomCode.value.length === 7) {
+            alert("Login!!")
+        } else {
+            alert("Invalid Value!")
+        }
+    })
+
+});
+
 const BOT_MSGS = [
     "Hi, how are you?",
     "Ohh... I can't understand what you trying to say. Sorry!",
