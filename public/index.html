@@ -6,9 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat</title>
     <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./loader.css">
 </head>
 
 <body>
+
+    <iframe id="login" src="./login.html" frameborder="0" width="100%" height="100%"></iframe>
+
+    <div class="loading-text"> <!--Loading-text-->
+        <h1 class="loading">
+            Waiting for person(s)
+            <span class="dot-one"> .</span>
+            <span class="dot-two"> .</span>
+            <span class="dot-three"> .</span>
+        </h1>
+    </div>
+
     <section class="msger">
         <header class="msger-header">
             <div class="msger-header-title">
@@ -54,12 +67,20 @@
         </main>
 
         <form class="msger-inputarea">
-            <input type="text" class="msger-input" placeholder="Enter your message...">
+            <input name="message-input" type="text" class="msger-input" placeholder="Enter your message...">
             <button type="submit" class="msger-send-btn">Send</button>
         </form>
     </section>
 
     <script src="./script.js"></script>
+
+    <script>
+        window.addEventListener('load', () => {
+            // Obtém a referência para o iframe
+            var iframe = document.getElementById('login');
+
+        });
+    </script>
 
 </body>
 

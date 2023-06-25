@@ -28,7 +28,7 @@ body {
 }
 
 .msger {
-    display: flex;
+    display: none; /* flex */
     flex-flow: column wrap;
     justify-content: space-between;
     width: 100%;
