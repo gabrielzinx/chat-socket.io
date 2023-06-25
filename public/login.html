@@ -100,19 +100,7 @@
 
     <script>
 
-        const formLogin = document.getElementById("login-form");
-        const usernameLogin = document.getElementById("usernameLogin");
         const roomCode = document.getElementById("roomCode");
-
-        formLogin.addEventListener('submit', (event) => {
-            event.preventDefault();
-
-            if (usernameLogin.value && roomCode.value.length === 7) {
-                alert("Login!!")
-            } else {
-                alert("Invalid Value!")
-            }
-        })
 
         roomCode.addEventListener('input', (event) => {
             let value = roomCode.value;

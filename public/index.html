@@ -75,9 +75,28 @@
     <script src="./script.js"></script>
 
     <script>
-        window.addEventListener('load', () => {
+
+        // Espera que o iframe seja carregado
+        window.addEventListener('load', function () {
             // Obtém a referência para o iframe
-            var iframe = document.getElementById('login');
+            var login = document.getElementById('login');
+
+            // Obtém o documento dentro do iframe
+            var loginDocument = login.contentDocument || login.contentWindow.document;
+
+            const formLogin = loginDocument.getElementById("login-form");
+            const usernameLogin = loginDocument.getElementById("usernameLogin");
+            const roomCode = loginDocument.getElementById("roomCode");
+
+            formLogin.addEventListener('submit', (event) => {
+                event.preventDefault();
+
+                if (usernameLogin.value && roomCode.value.length === 7) {
+                    alert("Login!!")
+                } else {
+                    alert("Invalid Value!")
+                }
+            })
 
         });
     </script>
