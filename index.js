@@ -1,6 +1,7 @@
 import express from 'express';
 import http from 'http';
 import path from 'path';
+import rooms from './rooms/data.js';
 
 import { Server } from "socket.io";
 import { fileURLToPath } from 'url';
@@ -22,6 +23,21 @@ app.get('/', (req, res) => {
 
 io.on('connection', (socket) => {
     console.log('a user connected', socket.id);
+
+    socket.on('join room', ({ username, roomCode }) => {
+        rooms.some((room) => {
+            if (room.code === roomCode) {
+                room.users.push({ username: username, id: socket.id });
+                socket.join(roomCode)
+
+                io.to(socket.id).emit('join room', room);
+            }
+        })
+    });
+
+    socket.on('disconnect', () => {
+        console.log('user disconnected');
+    });
 });
 
 server.listen(port, () => {
