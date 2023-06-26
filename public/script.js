@@ -2,10 +2,11 @@ const msgerForm = get(".msger-inputarea");
 const msgerInput = get(".msger-input");
 const msgerChat = get(".msger-chat");
 
+// eslint-disable-next-line no-undef
 const socket = io();
 
 // Espera que o iframe seja carregado
-window.addEventListener('load', function () {
+window.addEventListener('load', () => {
     // Obtém a referência para o iframe
     var login = document.getElementById('login');
 
@@ -19,13 +20,37 @@ window.addEventListener('load', function () {
     formLogin.addEventListener('submit', (event) => {
         event.preventDefault();
 
-        if (usernameLogin.value && roomCode.value.length === 7) {
-            alert("Login!!")
+        let value = roomCode.value;
+
+        // Remove caracteres não numéricos
+        value = value.replace(/\D/g, '');
+
+        // Limita o número máximo de caracteres em 6
+        if (value.length > 6) {
+            value = value.substr(0, 6);
+        }
+
+        if (usernameLogin.value && value.length === 6) {
+            socket.emit('join room', { username: usernameLogin.value, roomCode: value });
         } else {
-            alert("Invalid Value!")
+            alert(value);
         }
     })
+});
 
+socket.on('join room', (room) => {
+    const login = document.getElementById('login');
+    const loading = document.getElementById('loading-text');
+    const chat = document.getElementById('chat');
+
+    if (room.users.length === 1) {
+        login.style.display = 'none';
+        loading.style.display = 'flex';
+    } else if (room.users.length >= 2) {
+        login.style.display = 'none';
+        loading.style.display = 'none';
+        chat.style.display = 'flex';
+    }
 });
 
 const BOT_MSGS = [
