@@ -22,7 +22,6 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', (socket) => {
-    console.log('a user connected', socket.id);
 
     socket.on('join room', ({ username, roomCode }) => {
         rooms.some((room) => {
@@ -47,6 +46,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('disconnect', () => {
+        socket.leaveAll();
         rooms.forEach((room) => {
             room.users = room.users.filter((user) => user.id !== socket.id)
         })
