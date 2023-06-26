@@ -4,7 +4,7 @@ export default [
         "users": [],
         "menssages": [
             {
-                "name": "arl",
+                "name": "Karl",
                 "time": "18:00",
                 "msg": "Welcome a group 😁"
             }
