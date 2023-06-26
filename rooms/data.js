@@ -2,7 +2,7 @@ export default [
     {
         "code": "202301",
         "users": [],
-        "menssages": [
+        "messages": [
             {
                 "name": "Karl",
                 "time": "18:00",

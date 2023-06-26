@@ -32,6 +32,7 @@ window.addEventListener('load', () => {
 
         if (usernameLogin.value && value.length === 6) {
             PERSON_NAME = usernameLogin.value;
+            ROOM_CODE = value;
             socket.emit('join room', { username: PERSON_NAME, roomCode: value });
         } else {
             alert("Invalid Input!");
@@ -55,6 +56,7 @@ socket.on('join room', (room) => {
 });
 
 let PERSON_NAME = "";
+let ROOM_CODE = "";
 
 msgerForm.addEventListener("submit", event => {
     event.preventDefault();
@@ -62,13 +64,20 @@ msgerForm.addEventListener("submit", event => {
     const msgText = msgerInput.value;
     if (!msgText) return;
 
-    appendMessage(PERSON_NAME, "", "right", msgText);
+    appendMessage(PERSON_NAME, "", "right", msgText, formatDate(new Date()));
+
+    socket.emit("sending message", { username: PERSON_NAME, roomCode: ROOM_CODE, message: msgText, time: formatDate(new Date()) })
 
     msgerInput.value = "";
 
 });
 
-function appendMessage(name, img, side, text) {
+socket.on("receiving message", (data) => {
+    if (data.name === PERSON_NAME) return
+    appendMessage(data.name, "", "left", data.msg, data.time);
+});
+
+function appendMessage(name, img, side, text, time) {
     //   Simple solution for small apps
     const msgHTML = `
     <div class="msg ${side}-msg">
@@ -77,7 +86,7 @@ function appendMessage(name, img, side, text) {
       <div class="msg-bubble">
         <div class="msg-info">
           <div class="msg-info-name">${name}</div>
-          <div class="msg-info-time">${formatDate(new Date())}</div>
+          <div class="msg-info-time">${time}</div>
         </div>
 
         <div class="msg-text">${text}</div>

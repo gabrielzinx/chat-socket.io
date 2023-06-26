@@ -45,6 +45,25 @@ io.on('connection', (socket) => {
 
     });
 
+    socket.on("sending message", ({ username, roomCode, message, time }) => {
+        rooms.some((room) => {
+            if (room.code === roomCode) {
+                room.messages.push({
+                    name: username,
+                    time: time,
+                    msg: message
+                })
+                
+                io.to(roomCode).emit('receiving message', {
+                    name: username,
+                    time: time,
+                    msg: message
+                })
+                return true;
+            }
+        });
+    })
+
     socket.on('disconnect', () => {
         socket.leaveAll();
         rooms.forEach((room) => {
@@ -57,7 +76,7 @@ io.on('connection', (socket) => {
 function createRoom(code, user, maxConnections) {
     const room = {
         code: String(code),
-        users: [ user ],
+        users: [user],
         messages: [],
         maxConnections: maxConnections
     };
