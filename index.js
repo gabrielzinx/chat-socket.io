@@ -30,12 +30,15 @@ io.on('connection', (socket) => {
                 room.users.push({ username: username, id: socket.id });
                 socket.join(roomCode)
 
-                io.to(socket.id).emit('join room', room);
+                io.to(roomCode).emit('join room', room);
             }
         })
     });
 
     socket.on('disconnect', () => {
+        rooms.forEach((room) => {
+            room.users = room.users.filter((user) => user.id !== socket.id)
+        })
         console.log('user disconnected');
     });
 });
