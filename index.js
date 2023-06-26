@@ -28,11 +28,22 @@ io.on('connection', (socket) => {
         rooms.some((room) => {
             if (room.code === roomCode) {
                 room.users.push({ username: username, id: socket.id });
-                socket.join(roomCode)
+                socket.join(roomCode);
 
                 io.to(roomCode).emit('join room', room);
             }
-        })
+        });
+
+        const newRoom = createRoom(roomCode, { username: username, id: socket.id }, 5);
+
+        if (!rooms.find(i => i.code === roomCode)) {
+            rooms.push(newRoom);
+        } else return
+
+        socket.join(roomCode);
+
+        io.to(roomCode).emit('join room', newRoom);
+
     });
 
     socket.on('disconnect', () => {
@@ -42,6 +53,17 @@ io.on('connection', (socket) => {
         console.log('user disconnected');
     });
 });
+
+function createRoom(code, user, maxConnections) {
+    const room = {
+        code: String(code),
+        users: [ user ],
+        messages: [],
+        maxConnections: maxConnections
+    };
+
+    return room;
+}
 
 server.listen(port, () => {
     console.log(`server on listening: http://localhost:${port}`);
